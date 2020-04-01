@@ -46,7 +46,7 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.m1852
 
 # LiveDisplay
-PRODUCT_PACKAGES += \
+#PRODUCT_PACKAGES += \
     vendor.mokee.livedisplay@2.0-service-sdm
 
 # Vibrator
