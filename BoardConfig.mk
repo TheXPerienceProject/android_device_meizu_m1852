@@ -21,15 +21,15 @@ BOARD_HAVE_QCOM_FM := false
 # frp partition
 BOARD_FRP_PARTITION_NAME := frp
 
-# Kernel
-BOARD_KERNEL_CMDLINE += g_android.luns=1 g_android.removable=1 g_android.cdrom=1
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
-
 # HAX: Remove ASAP
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
 # HIDL
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
+
+# Kernel
+BOARD_KERNEL_CMDLINE += g_android.luns=1 g_android.removable=1 g_android.cdrom=1
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 
 # Properties
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
