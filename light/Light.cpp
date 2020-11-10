@@ -18,10 +18,11 @@
 #define LED_OFF 0
 #define LED_BLINK 10
 
-#define MIN_BRIGHTNES 30
-
 namespace {
 using android::hardware::light::V2_0::LightState;
+   
+#define MIN_BRIGHTNESS 30
+#define MAX_BRIGHTNESS 255
 
 static uint32_t rgbToBrightness(const LightState& state) {
     uint32_t color = state.color & 0x00ffffff;
@@ -101,11 +102,24 @@ void Light::setAttentionLight(const LightState& state) {
 void Light::setPanelBacklight(const LightState& state) {
     std::lock_guard<std::mutex> lock(mLock);
     uint32_t brightness = rgbToBrightness(state);
-    uint32_t brightness_meizu;
-    if (brightness < MIN_BRIGHTNES ) {
-        brightness_meizu = MIN_BRIGHTNES;
+    int brightness_old = brightness;
+
+    // don't let it go more down than 30 is visible at 1 but in newer android version
+    // min of 10 is complete blackscreen
+    if (brightness < MIN_BRIGHTNESS ) {
+        brightness = MIN_BRIGHTNESS;
     }
-    set(PANEL_BRIGHTNESS_PATH, brightness_meizu);
+
+    //in other devices some people want to play with brighness values
+    // dont let them do this if they try to set values >> from 255 reset to 255
+    if (brightness > MAX_BRIGHTNESS){
+        brightness = MAX_BRIGHTNESS;
+    }
+
+    //Test the values based on xingrz and thanks to blackrow67 for the data
+    LOG(VERBOSE) << "scaling brightness " << old_brightness << " => " << brightness;
+
+    set(PANEL_BRIGHTNESS_PATH, brightness);
 }
 
 void Light::setNotificationLight(const LightState& state) {
